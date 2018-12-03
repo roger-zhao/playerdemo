@@ -1478,9 +1478,9 @@ void VideoCtl::ReadThread(VideoState *is)
             (!is->video_st || (is->viddec.finished == is->videoq.serial && frame_queue_nb_remaining(&is->pictq) == 0))) {
 
             //播放结束
-#define REPLAY_LOOP
+#define REPLAY_LOOP 0
 
-#ifdef REPLAY_LOOP
+#if REPLAY_LOOP
 			is->seek_req = true;
 			is->seek_pos = 0;
 #else
@@ -1793,6 +1793,7 @@ void VideoCtl::LoopThread(VideoState *cur_stream)
 
 
     do_exit(m_CurStream);
+
     //m_CurStream = nullptr;
 
 }
@@ -2002,6 +2003,12 @@ void VideoCtl::OnStop()
 VideoCtl::VideoCtl(QObject *parent) : QObject(parent), 
 m_bInited(false), m_CurStream(nullptr), m_bPlayLoop(false), screen_width(0), screen_height(0), startup_volume(30), renderer(nullptr), window(nullptr)
 {
+	// setup log level
+	av_log_set_level(AV_LOG_DEBUG);
+
+	//FFmpeg av_log() callback
+	av_log_set_callback(custom_log);
+
     //注册所有复用器、编码器
     av_register_all();
     //网络格式初始化

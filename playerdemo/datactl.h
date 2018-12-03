@@ -278,6 +278,23 @@ typedef struct VideoState {
 
 static AVPacket flush_pkt;
 
+
+/*
+	output ffmpeg log to file
+*/
+
+//Output FFmpeg's av_log()
+static void custom_log(void *ptr, int level, const char* fmt, va_list vl) {
+
+	//To TXT file
+	FILE *fp = fopen("./av_log.txt", "a+");
+	if (fp) {
+		vfprintf(fp, fmt, vl);
+		fflush(fp);
+		fclose(fp);
+	}
+}
+
 //数据包队列存放数据包（供队列内部使用）
 static int packet_queue_put_private(PacketQueue *q, AVPacket *pkt)
 {

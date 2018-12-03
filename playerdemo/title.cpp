@@ -157,8 +157,15 @@ void Title::OnPlay(QString strMovieName)
 {
     qDebug() << "Title::OnPlay";
     QFileInfo fileInfo(strMovieName);
-    m_strMovieName = fileInfo.fileName();
-    ui->MovieNameLab->setText(m_strMovieName);
+	if (strMovieName.contains("rtsp", Qt::CaseInsensitive) ||
+		strMovieName.contains("udp", Qt::CaseInsensitive))
+		ui->MovieNameLab->setText(strMovieName);
+	else
+	{
+		m_strMovieName = fileInfo.fileName();
+		ui->MovieNameLab->setText(m_strMovieName);
+	}
+
     //ChangeMovieNameShow();
 }
 

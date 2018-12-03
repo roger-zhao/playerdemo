@@ -130,7 +130,9 @@ void Playlist::OnAddFile(QString strFileName)
         strFileName.endsWith(".flv", Qt::CaseInsensitive) ||
         strFileName.endsWith(".wmv", Qt::CaseInsensitive) ||
 		strFileName.endsWith(".mov", Qt::CaseInsensitive) ||
-        strFileName.endsWith(".3gp", Qt::CaseInsensitive);
+		strFileName.contains("rtsp", Qt::CaseInsensitive) ||
+		strFileName.contains("udp", Qt::CaseInsensitive) ||
+		strFileName.endsWith(".3gp", Qt::CaseInsensitive);
     if (!bSupportMovie)
     {
         return;
@@ -144,7 +146,14 @@ void Playlist::OnAddFile(QString strFileName)
 	{
         pItem = new QListWidgetItem(ui->List);
         pItem->setData(Qt::UserRole, QVariant(fileInfo.filePath()));  // 用户数据
-        pItem->setText(fileInfo.fileName());  // 显示文本
+
+		// Stream: all file name will be diplay
+		if(strFileName.contains("rtsp", Qt::CaseInsensitive) ||
+			strFileName.contains("udp", Qt::CaseInsensitive))
+			pItem->setText(strFileName);  // 显示文本
+		else
+			pItem->setText(fileInfo.fileName());  // 显示文本
+
         pItem->setToolTip(fileInfo.filePath());
         ui->List->addItem(pItem);
 	}
