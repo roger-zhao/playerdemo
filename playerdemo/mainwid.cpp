@@ -128,7 +128,7 @@ bool MainWid::Init()
         return false;
     }
 
-    m_stActFullscreen.setText("全屏");
+    m_stActFullscreen.setText("全屏切换");
     m_stActFullscreen.setCheckable(true);
     m_stMenu.addAction(&m_stActFullscreen);
 
@@ -136,11 +136,12 @@ bool MainWid::Init()
     m_stActOpen.setText("打开");
     m_stMenu.addAction(&m_stActOpen);
 
-    m_stActAbout.setText("关于");
-    m_stMenu.addAction(&m_stActAbout);
+    // m_stActAbout.setText("关于");
+    // m_stMenu.addAction(&m_stActAbout);
     
-    m_stActExit.setText(QString::fromLocal8Bit("退出"));
-    m_stMenu.addAction(&m_stActExit);
+	// m_stActExit.setText(QString::fromLocal8Bit("退出"));
+	 m_stActExit.setText("关闭播放器");
+	m_stMenu.addAction(&m_stActExit);
 
 
 

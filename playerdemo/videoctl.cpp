@@ -1478,8 +1478,15 @@ void VideoCtl::ReadThread(VideoState *is)
             (!is->video_st || (is->viddec.finished == is->videoq.serial && frame_queue_nb_remaining(&is->pictq) == 0))) {
 
             //播放结束
-            emit SigStop();
-            continue;
+#define REPLAY_LOOP
+
+#ifdef REPLAY_LOOP
+			is->seek_req = true;
+			is->seek_pos = 0;
+#else
+			emit SigStop();
+#endif
+			continue;
         }
         //按帧读取
         ret = av_read_frame(ic, pkt);

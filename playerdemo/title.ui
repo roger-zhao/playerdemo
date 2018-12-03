@@ -38,7 +38,7 @@
    <item row="0" column="1">
     <widget class="QLabel" name="MovieNameLab">
      <property name="text">
-      <string>movie_name</string>
+      <string>video info</string>
      </property>
      <property name="margin">
       <number>15</number>
@@ -142,7 +142,7 @@
       </font>
      </property>
      <property name="text">
-      <string>PlayerDemo</string>
+      <string>Remo Player</string>
      </property>
     </widget>
    </item>

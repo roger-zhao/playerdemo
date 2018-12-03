@@ -129,6 +129,7 @@ void Playlist::OnAddFile(QString strFileName)
         strFileName.endsWith(".avi", Qt::CaseInsensitive) ||
         strFileName.endsWith(".flv", Qt::CaseInsensitive) ||
         strFileName.endsWith(".wmv", Qt::CaseInsensitive) ||
+		strFileName.endsWith(".mov", Qt::CaseInsensitive) ||
         strFileName.endsWith(".3gp", Qt::CaseInsensitive);
     if (!bSupportMovie)
     {
