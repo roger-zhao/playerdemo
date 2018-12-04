@@ -17,11 +17,27 @@
 
 #pragma execution_character_set("utf-8")
 
-static int framedrop = -1;
-static int infinite_buffer = -1;
 static int64_t audio_callback_time;
 
 #define FF_QUIT_EVENT    (SDL_USEREVENT + 2)
+
+// AB ZhaoYJ@2018-12-04 for reducing lantency
+#define NOBUFFER 1
+#define  LOW_DELAY 1
+#define  FRAMEDROP 1
+#define  INF_BUFFER 1
+
+#if FRAMEDROP
+static int framedrop = 1;
+#else
+static int framedrop = -1;
+#endif
+
+#if INF_BUFFER
+static int infinite_buffer = 1;
+#else
+static int infinite_buffer = -1;
+#endif
 
 int VideoCtl::realloc_texture(SDL_Texture **texture, Uint32 new_format, int new_width, int new_height, SDL_BlendMode blendmode, int init_texture)
 {
@@ -1106,6 +1122,10 @@ int VideoCtl::stream_component_open(VideoState *is, int stream_index)
     if (!avctx)
         return AVERROR(ENOMEM);
 
+    #if LOW_DELAY
+    avctx->flags |= AV_CODEC_FLAG_LOW_DELAY;
+    #endif
+
     ret = avcodec_parameters_to_context(avctx, ic->streams[stream_index]->codecpar);
     if (ret < 0)
         goto fail;
@@ -1307,6 +1327,10 @@ void VideoCtl::ReadThread(VideoState *is)
 
     opts = nullptr;// setup_find_stream_info_opts(ic, codec_opts);
     orig_nb_streams = ic->nb_streams;
+
+#if NOBUFFER 
+	ic->flags |= AVFMT_FLAG_NOBUFFER;
+#endif
     //读取一部分视音频数据并且获得一些相关的信息
     err = avformat_find_stream_info(ic, opts);
 
