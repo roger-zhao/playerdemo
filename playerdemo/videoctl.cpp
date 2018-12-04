@@ -22,10 +22,13 @@ static int64_t audio_callback_time;
 #define FF_QUIT_EVENT    (SDL_USEREVENT + 2)
 
 // AB ZhaoYJ@2018-12-04 for reducing lantency
+// refer to: ./ffplay.exe -fflags nobuffer -flags low_delay -framedrop -strict experimental rtsp://192.168.1.10/chn2
+// https://lists.ffmpeg.org/pipermail/ffmpeg-user/2016-January/030127.html
 #define NOBUFFER 1
-#define  LOW_DELAY 1
-#define  FRAMEDROP 1
-#define  INF_BUFFER 1
+#define LOW_DELAY 1
+#define FRAMEDROP 1
+#define INF_BUFFER 1
+#define STRICT_EXPERIMENTAL 1
 
 #if FRAMEDROP
 static int framedrop = 1;
@@ -1125,6 +1128,10 @@ int VideoCtl::stream_component_open(VideoState *is, int stream_index)
     #if LOW_DELAY
     avctx->flags |= AV_CODEC_FLAG_LOW_DELAY;
     #endif
+
+	#if STRICT_EXPERIMENTAL
+	avctx->strict_std_compliance = FF_COMPLIANCE_EXPERIMENTAL;
+	#endif
 
     ret = avcodec_parameters_to_context(avctx, ic->streams[stream_index]->codecpar);
     if (ret < 0)
